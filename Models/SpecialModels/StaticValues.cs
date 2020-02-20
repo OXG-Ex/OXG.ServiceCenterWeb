@@ -15,6 +15,16 @@ namespace OXG.ServiceCenterWeb.Models.SpecialModels
             "Приемщик"
         };
 
+
+        public static List<string> Statuses = new List<string>()
+        {
+            "Диагностика",
+            "Ожидание согласования",
+            "Ожидание комплектующих",
+            "В работе",
+            "Выдано"
+        };
+
         public static List<string> MasterSpecializations = new List<string>()
         {
             "Ремонт ПК",

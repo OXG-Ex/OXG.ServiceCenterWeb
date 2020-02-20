@@ -26,23 +26,20 @@ namespace OXG.ServiceCenterWeb.Controllers
           
             return View();
         }
-       // [Authorize]
+       
         [HttpPost]
-       // [ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
-            //if (ModelState.IsValid)
-            //{
+            
                 var employeer = await db.Employeers.FirstOrDefaultAsync(e => e.Email == model.Email && e.Password == model.Password);
                 if (employeer != null)
                 {
                     await Authenticate(employeer.Email);
                     ViewBag.IsAuthenticated = "true";
-                    //return RedirectToAction("Index", "Home");
-                return Content(User.Identity.Name);
-            }
-                
-           // }
+                    return RedirectToAction("Index", "Home");
+               
+                }
             ModelState.AddModelError("", "Неверный Email и(или) пароль");
             return View(model);
         }
@@ -76,8 +73,8 @@ namespace OXG.ServiceCenterWeb.Controllers
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType,employeerName),
-                new Claim(ClaimTypes.Email, employeerName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType,employeerName)
+             
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 

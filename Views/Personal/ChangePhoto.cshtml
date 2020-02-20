@@ -7,6 +7,19 @@
 
 <h3>Выберите файл для загрузки</h3>
 <form asp-action="ChangePhoto" asp-controller="Personal" method="post" enctype="multipart/form-data">
-    <input type="file" name="uploadedFile" /><br>
-    <input type="submit" value="Загрузить" />
+    
+
+    <div class="form-group" style="width : 50%">
+        <div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="inputGroupFile02" name="uploadedFile">
+                <label class="custom-file-label" for="inputGroupFile02">Choose file</label>
+            </div>
+            <div class="input-group-append">
+                <span class="input-group-text" id=""><input type="submit" value="Загрузить" /></span>
+            </div>
+        </div>
+    </div>
 </form>
+
+
