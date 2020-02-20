@@ -1,0 +1,75 @@
+﻿@model OXG.ServiceCenterWeb.Models.Employeer
+
+@{
+    ViewData["Title"] = "Редактирование";
+}
+
+<h2>Редактирование</h2>
+@using (Html.BeginForm("Edit","Personal"))
+{
+
+
+<table>
+    <tr>
+        <td>
+            <label asp-for="Name"></label>
+        </td>
+        <td>
+            <input asp-for="Name" />
+        </td>
+    </tr>
+    @*<tr>
+        <td>
+            <label asp-for="Photo"></label>
+        </td>
+        <td>
+            <input type="file" name="EmployeerPhoto" />
+        </td>
+    </tr>*@
+    <tr>
+        <td>
+            <label asp-for="INN"></label>
+        </td>
+        <td>
+            <input asp-for="INN" />
+        </td>
+    </tr>
+    @*<tr>
+        <td>
+            <label asp-for="Reit"></label>
+        </td>
+        <td>
+            <input disabled asp-for="Reit" />
+        </td>
+    </tr>*@
+    <tr>
+        <td>
+            <h5 asp-for="Role.Name"></h5>
+        </td>
+        @*<td>
+            <input asp-for="Role.Name" />
+        </td>*@
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Percent"></label>
+        </td>
+        <td>
+            <input @*disabled*@ asp-for="Percent" />
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Specialization"></label>
+        </td>
+        <td>
+            <select asp-for="Specialization" asp-items="ViewBag.Spetializations"></select>
+        </td>
+    </tr>
+</table>
+
+<div asp-validation-summary="All"></div>
+<input type="submit" value="Сохранить" />
+}
+<hr />
+<h6 align="center"><a asp-controller="Personal" asp-action="MyAccount">Назад</a></h6>

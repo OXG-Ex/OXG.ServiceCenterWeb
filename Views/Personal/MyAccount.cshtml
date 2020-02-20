@@ -1,0 +1,73 @@
+﻿@model OXG.ServiceCenterWeb.Models.Employeer
+
+@{
+    ViewData["Title"] = "MyAccount";
+}
+
+<h2>MyAccount</h2>
+
+<table>
+    <tr>
+        <td>
+            <label asp-for="Name"></label>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Name)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Photo"></label>
+        </td>
+        <td>
+            @*@if (Model.Photo != null)
+            {
+                <img style='width:80px; height:60px;' src="@Model.Photo" />
+            }*@
+
+            <h6> <a asp-action="ChangePhoto">Изменить фотографию</a></h6>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Email"></label>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Email)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="INN"></label>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.INN)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Reit"></label>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Reit)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Percent"></label>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Percent)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <label asp-for="Specialization"></label>
+        </td>
+        <td>
+            @Html.DisplayFor(m => m.Specialization)
+        </td>
+    </tr>
+    
+</table><hr />
+<h6 align="center"><a asp-controller="Personal" asp-action="Edit">Редактировать</a></h6>
