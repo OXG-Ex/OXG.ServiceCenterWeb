@@ -11,6 +11,7 @@ namespace OXG.ServiceCenterWeb.Models
     /// </summary>
     public class Employeer
     {
+        
         public int Id { get; set; }
 
         [Display(Name = "Имя сотрудника")]

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<OXG.ServiceCenterWeb.Models.Receipt>
+@{
+    ViewData["Title"] = "Все квитанции";
+}
+
+<h1></h1>
+
+<div class="card border-primary mb-3">
+    <div class="card-header">Все квитанции</div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Номер</th>
+                    <th scope="col">Оборудование</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Дата создания</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Equipment.Name</td>
+                    <td>@item.Status</td>
+                    <td>@item.CreatedDate.ToShortDateString()</td>
+                    <td><a href="#">*</a></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

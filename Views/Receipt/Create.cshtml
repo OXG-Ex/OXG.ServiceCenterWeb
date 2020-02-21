@@ -16,11 +16,13 @@
     <div class="row">
         <div class="form-group col-lg-6">
             <label for="exampleSelect1">Мастер</label>
-            <select asp-for="Employeer" asp-items="ViewBag.Employeers" id="exampleSelect1"></select>
+            <select asp-for="Employeer.Id" asp-items="ViewBag.Employeers" id="exampleSelect1"></select>
+            <span asp-validation-for="Employeer.Name" />
         </div>
         <div class="form-group col-lg-6">
             <label for="exampleSelect2">Статус</label>
             <select asp-for="Status" asp-items="ViewBag.Status" id="exampleSelect2"></select>
+            <span asp-validation-for="Status" />
         </div>
     </div>
 
@@ -28,30 +30,36 @@
         <div class="form-group col-lg-6">
             <label for="exampleInputEmail1">Оборудование:</label>
             <input class="form-control" asp-for="Equipment.Name" placeholder="Системный блок">
+            <span asp-validation-for="Equipment.Name" />
         </div>
         <div class="form-group col-lg-6">
             <label for="exampleInputEmail1">Аксессуары:</label>
             <input class="form-control" asp-for="Equipment.Accesories" placeholder="+ ЗУ">
+            <span asp-validation-for="Equipment.Accesories" />
         </div>
     </div>
     <div class="form-group">
         <label for="exampleInputEmail1">Заявленная неисправность:</label>
         <input class="form-control" asp-for="Malfunction" placeholder="Настройка ОС">
+        <span asp-validation-for="Malfunction" />
     </div>
     <div class="row">
         <div class="form-group col-lg-6">
             <label for="exampleInputEmail1">Номер клиента:</label>
             <input class="form-control" asp-for="Client.Phone" placeholder="8-999-999-99-99">
+            <span asp-validation-for="Client.Phone" />
         </div>
         <div class="form-group col-lg-6">
             <label for="exampleInputEmail1">Имя клиента:</label>
             <input class="form-control" asp-for="Client.Name" placeholder="Иванов Иван">
+            <span asp-validation-for="Client.Name" />
         </div>
     </div>
     <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
         <label class="custom-control-label" for="customCheck1" asp-for="Warranty">Гарантия</label>
     </div>
-    <button type="submit" class="btn btn-primary">Создать</button>
+   
+    <input type="submit" class="btn btn-primary" value="Создать" />
 </fieldset>
 }
