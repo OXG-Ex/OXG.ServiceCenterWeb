@@ -27,6 +27,7 @@ namespace OXG.ServiceCenterWeb.Controllers
 
         public IActionResult Privacy()
         {
+            
             return View();
         }
 

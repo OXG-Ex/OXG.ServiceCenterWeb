@@ -3,12 +3,12 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1></h1>
 
 @using (Html.BeginForm("Edit"))
 {
     <fieldset>
-    <legend>@Model.Id</legend>
+    <legend>Номер квитанции: @Model.Id</legend>
     <div class="row">
         <div class="form-group col-lg-6">
             <label for="exampleSelect1">Мастер</label>
@@ -79,16 +79,23 @@
             </thead>
             <tbody>
 
-                @for (int i = 0; i < Model.ServicesProvidet.Count; i++ )
+                @for (int i = 0; i < Model.ServicesProvidet.Count; i++)
                 {
-                <tr>
-                    <th scope="row">@i</th>
-                    <td>@Model.ServicesProvidet[i].Name</td>
-                    <td>@Model.ServicesProvidet[i].Num</td>
-                    <td>@Model.ServicesProvidet[i].Price</td>
-                    <td>@((Model.ServicesProvidet[i].Price * Model.ServicesProvidet[i].Num).ToString()) | <a asp-action="DeleteWork" asp-controller="Receipt" asp-route-id="@i" asp-route-RID="@Model.Id">Удалить</a></td>
-                </tr>
+                    <tr>
+                        <th scope="row">@i</th>
+                        <td>@Model.ServicesProvidet[i].Name</td>
+                        <td>@Model.ServicesProvidet[i].Num</td>
+                        <td>@Model.ServicesProvidet[i].Price</td>
+                        <td>@((Model.ServicesProvidet[i].Price * Model.ServicesProvidet[i].Num).ToString()) | <a asp-action="DeleteWork" asp-controller="Receipt" asp-route-id="@Model.ServicesProvidet[i].Id" asp-route-RID="@Model.Id">Удалить</a></td>
+                    </tr>
                 }
+            <tr class="table-info">
+                <th scope="row">ИТОГО</th>
+                <td></td>
+                <td>@(Model.ServicesProvidet.Sum(r => r.Num))</td>
+                <td></td>
+                <td>@(Model.ServicesProvidet.Sum(r => r.Price * r.Num))</td>
+            </tr>
             </tbody>
         </table>
     </div>
@@ -102,23 +109,30 @@
                         <h5 class="modal-title" id="exampleModalLabel">Добавление услуги:</h5>
 
                     </div>
-                    <div class="modal-body"> 
-                        
+                    <div class="modal-body">
+
                         <label for="exampleSelect1">Услуга</label>
                         <select name="work" asp-items="ViewBag.Works" id="exampleSelect1"></select>
+                        <div class="row">
+                            <div class="form-group ">
+                                <label for="numWrk">Кол-во:</label>
+                                <input type="number" name="numWrk" id="numWrk">
+                            </div>
+                            
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <input type="submit" class="btn btn-primary" name="AddWorkBtn" value="Добавить услугу" />
+                        <div class="modal-footer">
+                            <input asp-action="Edit" type="submit" class="btn btn-primary" name="AddWorkBtn" value="Добавить услугу" />
+                        </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
             </div>
         </div> 
     <br />
     <hr />
-        <input type="submit" class="btn btn-primary" name="closeBtn" value="Провести и закрыть" />
-        <input type="submit" class="btn btn-primary" name="saveBtn" value="Сохранить изменения" />
+        <input asp-action="Edit" type="submit" class="btn btn-primary" name="closeBtn" value="Провести и закрыть" />
+        <input asp-action="Edit" type="submit" class="btn btn-primary" name="saveBtn" value="Сохранить изменения" />
     </fieldset>
 }

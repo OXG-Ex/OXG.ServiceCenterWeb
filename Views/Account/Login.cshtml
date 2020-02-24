@@ -1,41 +1,89 @@
 ﻿@model OXG.ServiceCenterWeb.Models.LoginModel
 
 @{
-    ViewData["Title"] = "Login";
+	ViewData["Title"] = "Login";
 }
+	@*<style>
+		* {
+			margin: 0;
+			padding-left: -250px;
+		}
+	</style>*@
+@*<h2>Вход</h2>
 
-<h2>Вход</h2>
+	<div align="center">
+		@using (Html.BeginForm("Login"))
+		{
+			<table>
+				<tr>
+					<td>
+						<label asp-for="Email"></label>
+					</td>
+					<td>
+						<input type="text" asp-for="Email" />
+						<span asp-validation-for="Email" />
+					</td>
+				</tr>
+				<tr>
+					<td><br /></td>
+					<td><br /></td>
+				</tr>
+				<tr>
+					<td>
+						<label asp-for="Password"></label>
+					</td>
+					<td>
+						<input type="password" asp-for="Password" />
+						<span asp-validation-for="Password" />
+					</td>
+				</tr>
+			</table><br />
+			<div asp-validation-summary="ModelOnly"></div>
+			<input type="submit" name="submit" value="Войти" />
+			<hr />
+			<h6><a asp-controller="Account" asp-action="Register">Регистрация</a></h6>
+		}
+	</div>*@
 
-<div align="center">
-	@using (Html.BeginForm("Login"))
-	{
-		<table>
-			<tr>
-				<td>
-					<label asp-for="Email"></label>
-				</td>
-				<td>
-					<input type="text" asp-for="Email" />
-					<span asp-validation-for="Email" />
-				</td>
-			</tr>
-			<tr>
-				<td><br /></td>
-				<td><br /></td>
-			</tr>
-			<tr>
-				<td>
-					<label asp-for="Password"></label>
-				</td>
-				<td>
-					<input type="password" asp-for="Password" />
-					<span asp-validation-for="Password" />
-				</td>
-			</tr>
-		</table><br />
-		<div asp-validation-summary="ModelOnly"></div>
-		<input type="submit" name="submit" value="Войти" />
-		<hr />
-		<h6><a asp-controller="Account" asp-action="Register">Регистрация</a></h6>
-	}
+<div class="container-fluid">
+		<div class="row no-gutter">
+			<div class="d-none d-md-flex col-md-4 col-lg-6 bg-image" style="padding-left: 0px;"></div>
+			<div class="col-md-8 col-lg-6">
+				<div class="login d-flex align-items-center py-5">
+					<div class="container">
+						<div class="row">
+							<div class="col-md-9 col-lg-8 mx-auto">
+								<h3 class="login-heading mb-4">Добро пожаловать!</h3>
+								@using (Html.BeginForm("Login"))
+								{
+									<div class="form-label-group">
+
+										<input asp-for="Email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus />
+										<label asp-for="Email"></label>
+										<span asp-validation-for="Email" />
+									</div>
+
+									<div class="form-label-group">
+
+										<input type="password" asp-for="Password" id="inputPassword" class="form-control" placeholder="Password" required />
+										<label asp-for="Password"></label>
+										<span asp-validation-for="Password" />
+									</div>
+
+									<div class="custom-control custom-checkbox mb-3">
+										<input type="checkbox" class="custom-control-input" id="customCheck1">
+										<label class="custom-control-label" for="customCheck1">Запомнить меня</label>
+									</div>
+									<div asp-validation-summary="All"></div>
+									<input class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="submit" value="Войти" />
+								}
+								<div class="text-center">
+									<a class="small" asp-action="Register">Регистрация</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 </div>

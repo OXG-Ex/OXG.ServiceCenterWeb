@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OXG.ServiceCenterWeb.Models;
 using OXG.ServiceCenterWeb.Models.SpecialModels;
 
 namespace OXG.ServiceCenterWeb.Controllers
 {
+    [Authorize]
     public class WorksController : Controller
     {
         private ServiceCenterDbContext db;

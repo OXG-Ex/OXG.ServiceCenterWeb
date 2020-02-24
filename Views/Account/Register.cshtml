@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<h2>Регистрация сотрудника</h2>
+@*<h2>Регистрация сотрудника</h2>
 
 
 <div align="center">
@@ -51,4 +51,51 @@
         <br />
         <input type="submit" name="submit" value="Зарегистрироваться" />
     }
-</div>
+</div>*@
+
+
+
+    <div class="container-fluid">
+        <div class="row no-gutter">
+            <div class="d-none d-md-flex col-md-4 col-lg-6 bg-image" style="padding-left: 0px;"></div>
+            <div class="col-md-8 col-lg-6">
+                <div class="login d-flex align-items-center py-5">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-9 col-lg-8 mx-auto">
+                                <h3 class="login-heading mb-4">Регистрация</h3>
+                                @using (Html.BeginForm("Register"))
+                                {
+                                    <div class="form-label-group">
+
+                                        <input asp-for="Email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus />
+                                        <label asp-for="Email"></label>
+                                        <span  asp-validation-for="Email" />
+                                    </div>
+
+                                    <div class="form-label-group">
+
+                                        <input type="password" asp-for="Password" id="inputPassword" class="form-control" placeholder="Password" required />
+                                        <label asp-for="Password"></label>
+                                        <span  asp-validation-for="Password" />
+                                    </div>
+
+                                    <div class="form-label-group">
+
+                                        <input type="password" asp-for="ConfirmPasswod"  class="form-control" placeholder="Password" required />
+                                        <label asp-for="ConfirmPasswod"></label>
+                                        <span  asp-validation-for="ConfirmPasswod" />
+                                    </div>
+                                    <div asp-validation-summary="ModelOnly"></div>
+                                    <input class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" type="submit" name="submit" value="Зарегистрироваться" />
+                                }
+                                <div class="text-center">
+                                    <a class="small" asp-action="Login">Уже зарегистрированы?</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
