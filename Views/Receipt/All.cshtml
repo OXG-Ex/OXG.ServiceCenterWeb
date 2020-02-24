@@ -26,7 +26,7 @@
                     <td>@item.Equipment.Name</td>
                     <td>@item.Status</td>
                     <td>@item.CreatedDate.ToShortDateString()</td>
-                    <td><a href="#">*</a></td>
+                    <td><a asp-controller="Receipt" asp-action="Edit" asp-route-id="@item.Id"><img src="~/Files/diodon.png" width="30px" height="30px" /></a></td>
                 </tr>
                 }
             </tbody>

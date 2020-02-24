@@ -22,7 +22,7 @@ namespace OXG.ServiceCenterWeb.Models
         [Display(Name = "Подтвердите пароль")]
         [Required(ErrorMessage = "Данное поле обязательно для заполения")]
         [DataType(DataType.Password)]
-     //   [Compare("Password",ErrorMessage ="Пароли не совпадают")]
+        [Compare("Password",ErrorMessage ="Пароли не совпадают")]
         public string ConfirmPasswod { get; set; }
     }
 }

@@ -42,13 +42,14 @@ namespace OXG.ServiceCenterWeb.Models
 
         [Display(Name = "Результат диагностики")]
         [DataType(DataType.MultilineText)]
-        public string DiagnosticResult { get; set; } = "";
+        [UIHint("MultilineText")]
+        public string DiagnosticResult { get; set; }/* = "";*/
 
         [Display(Name = "Оказанные услуги")]
-        public List<Work> ServicesProvidet { get; set; } = new List<Work> {/* new Work() { Id = 0, Name = "NotPayment", Num = 0, Price = 0 }*/ };
+        public List<Work> ServicesProvidet { get; set; }/* = new List<Work> {/* new Work() { Id = 0, Name = "NotPayment", Num = 0, Price = 0 } }*/
 
         [Display(Name = "Использованные компоненты")]
-        public List<Component> Components { get; set; } = new List<Component> { };
+        public List<Component> Components { get; set; }/* = new List<Component> { };*/
 
         [Display(Name = "Статус квитанции")]
         [Required(ErrorMessage = "Выберите текущий статус", AllowEmptyStrings = false)]
