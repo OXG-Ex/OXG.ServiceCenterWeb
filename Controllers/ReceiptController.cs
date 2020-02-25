@@ -24,7 +24,7 @@ namespace OXG.ServiceCenterWeb.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Employeers = new SelectList(db.Employeers,"Id","Name");
+            ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name == "Мастер"), "Id","Name");
             ViewBag.Status = new SelectList(StaticValues.Statuses);
             return View();
         }
@@ -56,19 +56,19 @@ namespace OXG.ServiceCenterWeb.Controllers
 
         public IActionResult Edit(int id)
         {
-            ViewBag.Employeers = new SelectList(db.Employeers, "Id", "Name");
+            ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name == "Мастер"), "Id", "Name");
             ViewBag.Status = new SelectList(StaticValues.Statuses);
             ViewBag.Works = new SelectList(db.Works, "Id", "Name");
-            var receipt = db.Receipts.Include(e => e.Equipment).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefault(r => r.Id == id);
+            var receipt = db.Receipts.Include(e => e.Employeer).Include(e => e.Equipment).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefault(r => r.Id == id);
             return View(receipt);
         }
 
         public async Task<IActionResult> DeleteWork(int id, int RID)
         {
-            ViewBag.Employeers = new SelectList(db.Employeers, "Id", "Name");
+            ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name == "Мастер"), "Id", "Name");
             ViewBag.Status = new SelectList(StaticValues.Statuses);
             ViewBag.Works = new SelectList(db.Works, "Id", "Name");
-            var receipt = db.Receipts.Include(e => e.Equipment).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefault(r => r.Id == RID);
+            var receipt = db.Receipts.Include(e => e.Equipment).Include(e => e.Employeer).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefault(r => r.Id == RID);
             var work = await db.Works.FirstOrDefaultAsync(w => w.Id == id);
             receipt.ServicesProvidet./*Clear()*/Remove(work);
             //receipt.TotalPrice = receipt.ServicesProvidet.Sum(r => r.Price * r.Num);
@@ -78,15 +78,17 @@ namespace OXG.ServiceCenterWeb.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Edit(Receipt receipt, string closeBtn, string saveBtn, string AddWorkBtn, int work, byte numWrk)
-        {
-            ViewBag.Employeers = new SelectList(db.Employeers, "Id", "Name");
+        {//TODO: Добавить защиту от повторного закрытия квитанций 
+            ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name=="Мастер"), "Id", "Name");
             ViewBag.Status = new SelectList(StaticValues.Statuses);
             ViewBag.Works = new SelectList(db.Works, "Id", "Name");
-            var receiptDb = await db.Receipts.Include(e => e.Equipment).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefaultAsync(r => r.Id == receipt.Id);
+            var receiptDb = await db.Receipts.Include(e => e.Equipment).Include(e => e.Employeer).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefaultAsync(r => r.Id == receipt.Id);
             if (closeBtn != null)
             {
                 receiptDb.Status = "Выдано";
                 receiptDb.ClosedDate = DateTime.Now;
+                receiptDb.TotalPrice = receiptDb.ServicesProvidet.Sum(r => r.Price * r.Num);
+                receiptDb.Employeer.Balance += (Decimal)receiptDb.TotalPrice * ((Decimal)receiptDb.Employeer.Percent/100);
                 await db.SaveChangesAsync();
                 return RedirectToAction("All");
             }
@@ -95,7 +97,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             {
                 receiptDb.Status = receipt.Status;
                 receiptDb.DiagnosticResult = receipt.DiagnosticResult;
-                receiptDb.TotalPrice = receipt.TotalPrice;
+                receiptDb.TotalPrice = receiptDb.ServicesProvidet.Sum(r => r.Price * r.Num);
                 await db.SaveChangesAsync();
                 return RedirectToAction("All");
             }

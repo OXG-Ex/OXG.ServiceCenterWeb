@@ -32,10 +32,10 @@ namespace OXG.ServiceCenterWeb.Controllers
         public async Task<IActionResult> Login(LoginModel model)
         {
             
-                var employeer = await db.Employeers.FirstOrDefaultAsync(e => e.Email == model.Email && e.Password == model.Password);
+                var employeer = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == model.Email && e.Password == model.Password);
                 if (employeer != null)
                 {
-                    await Authenticate(employeer.Email);
+                    await Authenticate(employeer.Email, employeer.Role.Name);
                     ViewBag.IsAuthenticated = "true";
                     return RedirectToAction("Index", "Home");
                
@@ -49,6 +49,12 @@ namespace OXG.ServiceCenterWeb.Controllers
             return View();
         }
 
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+       
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -57,10 +63,10 @@ namespace OXG.ServiceCenterWeb.Controllers
                 var employeer = await db.Employeers.FirstOrDefaultAsync(e => e.Email == model.Email);
                 if (employeer == null )
                 {
-                    db.Employeers.Add(new Employeer() { Email = model.Email, Password = model.Password });
-
+                    db.Employeers.Add(new Employeer() { Email = model.Email, Password = model.Password, RoleId=1 });
+                    
                     await db.SaveChangesAsync();
-                    await Authenticate(model.Email);
+                    await Authenticate(model.Email,"Мастер");
                     return RedirectToAction("Index", "Home");
                 }
                
@@ -69,12 +75,12 @@ namespace OXG.ServiceCenterWeb.Controllers
             return View(model);
         }
 
-        private async Task Authenticate(string employeerName)
+        private async Task Authenticate(string employeerName, string employeerRole)
         {
             var claims = new List<Claim>()
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType,employeerName)
-             
+                new Claim(ClaimsIdentity.DefaultNameClaimType,employeerName),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType,employeerRole)
             };
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
 

@@ -1,0 +1,51 @@
+﻿@model OXG.ServiceCenterWeb.Models.Employeer
+@{
+    ViewData["Title"] = "EditEmployeer";
+}
+
+<h1>Редактирование информации</h1>
+<a asp-action="Employeers">Назад</a>
+@using (Html.BeginForm("EditEmployeer"))
+ {
+    <fieldset>
+        <legend>Id сотрудника: @Model.Id</legend>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-header">Общая информация</div>
+                    <div class="card-body">
+                        <img src="@Model.Photo" class="img-fluid img-thumbnail" />
+                        <div class="form-group">
+                            <label for="InputName1">Имя сотрудника:</label>
+                            <input class="form-control" asp-for="@Model.Name" placeholder="null" id="InputName1">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputPercent">Процент:</label>
+                            <input class="form-control" type="number" asp-for="@Model.Percent" placeholder="null" id="InputPercent">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputINN">ИНН:</label>
+                            <input class="form-control" type="number" asp-for="@Model.INN" placeholder="null" id="InputINN">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputRole">Статус:</label>
+                            <input class="form-control" type="number" asp-for="@Model.RoleId" placeholder="null" id="InputRole">
+                        </div>
+                        <div class="form-group">
+                            <label for="SelectSpecialization"> Специализация</label>
+                            <select class="custom-select" asp-for="Specialization" asp-items="ViewBag.Spetializations" id="SelectSpecialization"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card border-primary">
+                    <div class="card-header">Статистика</div>
+                    <div class="card-body">
+                        @Model.Balance
+                    </div>
+                </div>
+            </div>
+        </div>
+</fieldset>
+ }

@@ -33,6 +33,10 @@ namespace OXG.ServiceCenterWeb.Models
         [Display(Name = "Рейтинг (0-100)")]
         public byte Reit { get; set; }
 
+        [Display(Name = "Баланс")]
+        [DataType(DataType.Currency)]
+        public decimal Balance { get; set; }
+
         [Display(Name = "Электронная почта")]
         [DataType(DataType.EmailAddress)]
         [RegularExpression(@"(?i)\b[A-Z0-9._%-]+@[A-Z0-9.-]+\[A-Z]{2,4}\b")]

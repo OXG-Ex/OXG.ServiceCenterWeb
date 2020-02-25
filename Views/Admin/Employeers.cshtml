@@ -1,0 +1,36 @@
+﻿@model IEnumerable<OXG.ServiceCenterWeb.Models.Employeer>
+@{
+    ViewData["Title"] = "Employeers";
+}
+
+<h1>Сотрудники</h1>
+
+<div class="card border-primary mb-3">
+    <div class="card-header">Все</div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">ФИО</th>
+                    <th scope="col">Процент</th>
+                    <th scope="col">Роль</th>
+                    <th scope="col">Специализация</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Name</td>
+                    <td>@item.Percent</td>
+                    <td>@item.Role.Name</td>
+                    <td>@item.Specialization</td>
+                    <td><a asp-controller="Admin" asp-action="EditEmployeer" asp-route-id="@item.Id"><img src="~/Files/diodon.png" width="30px" height="30px" /></a></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
