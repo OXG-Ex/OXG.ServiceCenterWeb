@@ -5,7 +5,6 @@
 
 <h1 align="center">Новая квитанция</h1>
 
-////////////////////////////////////////////////////////////////////////////////////////////
 
 @using (Html.BeginForm("Create"))
 {
@@ -54,8 +53,8 @@
         </div>
     </div>
     <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="customCheck1" checked="">
-        <label class="custom-control-label" for="customCheck1" asp-for="Warranty">Гарантия</label>
+        <input type="checkbox" class="custom-control-input" id="customCheck1" asp-for="Warranty">
+        <label class="custom-control-label" for="customCheck1" >Гарантия</label>
     </div>
    
     <input type="submit" class="btn btn-primary" value="Создать" />

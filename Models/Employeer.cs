@@ -39,7 +39,7 @@ namespace OXG.ServiceCenterWeb.Models
 
         [Display(Name = "Электронная почта")]
         [DataType(DataType.EmailAddress)]
-        [RegularExpression(@"(?i)\b[A-Z0-9._%-]+@[A-Z0-9.-]+\[A-Z]{2,4}\b")]
+        [RegularExpression(@"(?i)[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Z]{2,4}\b")]
         public string Email { get; set; }
 
         [Display(Name = "Пароль")]

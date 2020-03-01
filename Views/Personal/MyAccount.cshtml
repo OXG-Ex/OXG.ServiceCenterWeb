@@ -4,70 +4,102 @@
     ViewData["Title"] = "MyAccount";
 }
 
-<h2>MyAccount</h2>
 
-<table>
-    <tr>
-        <td>
-            <label asp-for="Name"></label>
-        </td>
-        <td>
-            @Html.DisplayFor(m => m.Name)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Photo"></label>
-        </td>
-        <td>
-            @if (Model.Photo != null)
-            {
-                <img style='width:80px; height:60px;' src="@Model.Photo" />
-            }
+@using (Html.BeginForm("MyAccount"))
+{
+    <fieldset>
+        <legend>Id сотрудника: @Model.Id</legend>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-header">Общая информация</div>
+                    <div class="card-body">
+                        <a asp-action="ChangePhoto"><img src="@Model.Photo" class="img-fluid img-thumbnail" /></a>
+                        <div class="form-group">
+                            <label for="InputName1">Имя сотрудника:</label>
+                            <input class="form-control" readonly="" asp-for="@Model.Name" placeholder="null" id="InputName1">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputPercent">Процент:</label>
+                            <input class="form-control" readonly="" type="number" asp-for="@Model.Percent" placeholder="null" id="InputPercent">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputINN">ИНН:</label>
+                            <input class="form-control" readonly="" type="number" asp-for="@Model.INN" placeholder="null" id="InputINN">
+                        </div>
+                        <div class="form-group">
+                            <label for="SelectSpecialization"> Специализация</label>
+                            <input class="form-control" readonly="" asp-for="@Model.Specialization" placeholder="null" id="SelectSpecialization">
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <h6> <a asp-action="ChangePhoto">Изменить фотографию</a></h6>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Email"></label>
-        </td>
-        <td>
-            @Html.DisplayFor(m => m.Email)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="INN"></label>
-        </td>
-        <td>
-            @Html.DisplayFor(m => m.INN)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Reit"></label>
-        </td>
-        <td>
-            @Html.DisplayFor(m => m.Reit)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Percent"></label>
-        </td>
-        <td>
-            @Html.DisplayFor(m => m.Percent)
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Specialization"></label>
-        </td>
-        <td>
-            @Html.DisplayFor(m => m.Specialization)
-        </td>
-    </tr>
+            <div class="col-lg-8">
+                <div class="card border-primary">
+                    <div class="card-header">Статистика</div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <label class="text-lg-center" for="Sel">Баланс:</label>
+                                <input type="text" readonly="" class="form-control-plaintext" id="Sel" value="@Model.Balance">
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                    Списать
+                                </button>
+                                <div asp-validation-summary="All"></div>
+                            </div>
+                        </div>
+                                <div class="form-group">
+                                    <label class="text-lg-center" for="Sel1">Рейтинг: @Model.Reit%</label>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="@Model.Reit" aria-valuemin="0" aria-valuemax="100" style="width: @Model.Reit%"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-3">
+                                        <label class="text-lg-center" for="Sel3">Квитанций:</label>
+                                        <input type="text" readonly="" class="form-control-plaintext" id="Sel3" value="@ViewBag.ReceiptsCount">
+                                    </div>|
+                                    <div class="form-group col-lg-3">
+                                        <label class="text-lg-center" for="Sel4">На сумму:</label>
+                                        <input type="text" readonly="" class="form-control-plaintext" id="Sel4" value="@ViewBag.EmployeerSum">
+                                    </div>|
+                                    <div class="form-group col-lg-3">
+                                        <label class="text-lg-center" for="Sel5">Заработная плата:</label>
+                                        <input type="text" readonly="" class="form-control-plaintext" id="Sel5" value="@ViewBag.EmployeerSalary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary" asp-action="Edit" asp-controller="Personal"> Редактировать</a>
+                    </div>
+                </div>
+    </fieldset>
     
-</table><hr />
-<h6 align="center"><a asp-controller="Personal" asp-action="Edit">Редактировать</a></h6>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Списание средств:</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group ">
+                            <label for="sum">Сумма:</label>
+                            <input type="number" name="sum" id="sum">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input asp-action="Salary" type="submit" class="btn btn-primary" name="AddWorkBtn" value="Списать" />
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+}

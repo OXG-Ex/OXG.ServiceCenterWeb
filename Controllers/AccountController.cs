@@ -58,21 +58,22 @@ namespace OXG.ServiceCenterWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
-        {//TODO: Добавить сравнение паролей
-            
+        {
+            if (ModelState.IsValid)
+            {
                 var employeer = await db.Employeers.FirstOrDefaultAsync(e => e.Email == model.Email);
-                if (employeer == null )
+                if (employeer == null)
                 {
-                    db.Employeers.Add(new Employeer() { Email = model.Email, Password = model.Password, RoleId=1 });
-                    
+                    db.Employeers.Add(new Employeer() { Email = model.Email, Password = model.Password, RoleId = 1 });
+
                     await db.SaveChangesAsync();
-                    await Authenticate(model.Email,"Мастер");
+                    await Authenticate(model.Email, "Мастер");
                     return RedirectToAction("Index", "Home");
                 }
-               
-            
-            ModelState.AddModelError("", "Некоректные данные регистрации");
-            return View(model);
+
+            }
+                ModelState.AddModelError("", "Некоректные данные регистрации");
+                return View(model);
         }
 
         private async Task Authenticate(string employeerName, string employeerRole)

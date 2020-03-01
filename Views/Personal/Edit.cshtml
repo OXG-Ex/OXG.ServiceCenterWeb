@@ -4,72 +4,85 @@
     ViewData["Title"] = "Редактирование";
 }
 
-<h2>Редактирование</h2>
-@using (Html.BeginForm("Edit","Personal"))
+<h1>Редактирование информации</h1>
+<a asp-action="MyAccount">Назад</a>
+@using (Html.BeginForm("Edit"))
 {
+    <fieldset>
+        <legend>Id сотрудника: @Model.Id</legend>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-primary">
+                    <div class="card-header">Общая информация</div>
+                    <div class="card-body">
+                        <a asp-action="ChangePhoto"><img src="@Model.Photo" class="img-fluid img-thumbnail" /></a>
+                        <div class="form-group">
+                            <label for="InputName1">Имя сотрудника:</label>
+                            <input class="form-control" asp-for="@Model.Name" placeholder="null" id="InputName1">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputPercent">Процент:</label>
+                            <input readonly="" class="form-control" type="number" asp-for="@Model.Percent" placeholder="null" id="InputPercent">
+                        </div>
+                        <div class="form-group">
+                            <label for="InputINN">ИНН:</label>
+                            <input class="form-control" type="number" asp-for="@Model.INN" placeholder="null" id="InputINN">
+                        </div>
+                        <div class="form-group">
+                            <label for="SelectSpecialization"> Специализация</label>
+                            <input class="form-control" readonly="" asp-for="@Model.Specialization" placeholder="null" id="SelectSpecialization">
+                        </div>
+                    </div>
+                </div>
+                <input class="btn btn-primary" type="submit" value="Сохранить" />
+            </div>
 
-
-<table>
-    <tr>
-        <td>
-            <label asp-for="Name"></label>
-        </td>
-        <td>
-            <input asp-for="Name" />
-        </td>
-    </tr>
-    @*<tr>
-        <td>
-            <label asp-for="Photo"></label>
-        </td>
-        <td>
-            <input type="file" name="EmployeerPhoto" />
-        </td>
-    </tr>*@
-    <tr>
-        <td>
-            <label asp-for="INN"></label>
-        </td>
-        <td>
-            <input asp-for="INN" />
-        </td>
-    </tr>
-    @*<tr>
-        <td>
-            <label asp-for="Reit"></label>
-        </td>
-        <td>
-            <input disabled asp-for="Reit" />
-        </td>
-    </tr>*@
-    <tr>
-        <td>
-            <h5 asp-for="Role.Name"></h5>
-        </td>
-        @*<td>
-            <input asp-for="Role.Name" />
-        </td>*@
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Percent"></label>
-        </td>
-        <td>
-            <input asp-for="Percent" />
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <label asp-for="Specialization"></label>
-        </td>
-        <td>
-            <select asp-for="Specialization" asp-items="ViewBag.Spetializations"></select>
-        </td>
-    </tr>
-</table>
-
-<div asp-validation-summary="All"></div>
-     <input type="submit" value="Сохранить" />
+            <div class="col-lg-8">
+                <div class="card border-primary">
+                    <div class="card-header">Статистика</div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label class="text-lg-center" for="Sel">Баланс</label>
+                            <input type="text" readonly="" class="form-control-plaintext" id="Sel" value="@Model.Balance">
+                        </div>
+                        <div class="form-group">
+                            <label class="text-lg-center" for="Sel1">Рейтинг: @Model.Reit%</label>
+                            <div class="progress">
+                                <div class="progress-bar bg-info progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="@Model.Reit" aria-valuemin="0" aria-valuemax="100" style="width: @Model.Reit%"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-3">
+                                <label class="text-lg-center" for="Sel3">Квитанций:</label>
+                                <input type="text" readonly="" class="form-control-plaintext" id="Sel3" value="@ViewBag.ReceiptsCount">
+                            </div>|
+                            <div class="form-group col-lg-3">
+                                <label class="text-lg-center" for="Sel4">На сумму:</label>
+                                <input type="text" readonly="" class="form-control-plaintext" id="Sel4" value="@ViewBag.EmployeerSum">
+                            </div>|
+                            <div class="form-group col-lg-3">
+                                <label class="text-lg-center" for="Sel5">Заработная плата:</label>
+                                <input type="text" readonly="" class="form-control-plaintext" id="Sel5" value="@ViewBag.EmployeerSalary">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-lg-3">
+                                <label for="EditEmail">Email</label>
+                                <input class="form-control" asp-for="@Model.Email" placeholder="example@email.com" id="EditEmail">
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label for="OldPass">Старый пароль:</label>
+                                <input class="form-control" type="password" asp-for="@Model.Password" placeholder="" id="OldPass">
+                            </div>
+                            <div class="form-group col-lg-3">
+                                <label for="NewPass">Новый пароль:</label>
+                                <input class="form-control" name="NewPass" type="password" for="NewPass" placeholder="" id="NewPass">
+                            </div>
+                        </div>
+                        <div asp-validation-summary="All"></div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
 }
-<hr />
-<h6 align="center"><a asp-controller="Personal" asp-action="MyAccount">Назад</a></h6>

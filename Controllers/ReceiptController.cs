@@ -1,4 +1,5 @@
 ﻿using System;
+using static System.Math;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -38,10 +39,12 @@ namespace OXG.ServiceCenterWeb.Controllers
             var equipment = new Equipment() { Name = receipt.Equipment.Name, Accesories = receipt.Equipment.Accesories };
             var employeer = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Id == receipt.Employeer.Id);
 
+            //await db.Clients.AddAsync(client);
+            //await db.Equipments.AddAsync(equipment);
+            
+
             receipt.Employeer = employeer;
             receipt.CreatedDate = DateTime.Now;
-            await db.Clients.AddAsync(client);
-            await db.Equipments.AddAsync(equipment);
             await db.Receipts.AddAsync(receipt);
             await db.SaveChangesAsync();
             return RedirectToAction("All");
@@ -86,9 +89,31 @@ namespace OXG.ServiceCenterWeb.Controllers
             if (closeBtn != null)
             {
                 receiptDb.Status = "Выдано";
+                receiptDb.Warranty = receipt.Warranty;
                 receiptDb.ClosedDate = DateTime.Now;
+                receiptDb.DiagnosticResult = receipt.DiagnosticResult;
                 receiptDb.TotalPrice = receiptDb.ServicesProvidet.Sum(r => r.Price * r.Num);
                 receiptDb.Employeer.Balance += (Decimal)receiptDb.TotalPrice * ((Decimal)receiptDb.Employeer.Percent/100);
+                await db.SaveChangesAsync();
+                decimal receiptCount = db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == receiptDb.Employeer.Name).Count();
+                decimal warrantiedReceipt = db.Receipts.Include(e => e.Employeer).Where(r => r.Warranty == true && r.Employeer.Name == receiptDb.Employeer.Name).Count();
+                try
+                {
+                    decimal temp = (warrantiedReceipt / receiptCount)*100;
+                    if (temp != 0)
+                    {
+                        receiptDb.Employeer.Reit =(byte)(Round(100 - temp));
+                    }
+                    else
+                    {
+                        receiptDb.Employeer.Reit = 100;
+                    }
+                }
+                catch (Exception)
+                {
+                    receiptDb.Employeer.Reit = 0;
+                }
+                
                 await db.SaveChangesAsync();
                 return RedirectToAction("All");
             }
@@ -96,6 +121,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             if (saveBtn != null)
             {
                 receiptDb.Status = receipt.Status;
+                receiptDb.Warranty = receipt.Warranty;
                 receiptDb.DiagnosticResult = receipt.DiagnosticResult;
                 receiptDb.TotalPrice = receiptDb.ServicesProvidet.Sum(r => r.Price * r.Num);
                 await db.SaveChangesAsync();
@@ -112,6 +138,7 @@ namespace OXG.ServiceCenterWeb.Controllers
                     var tempWork = new Work();
                     tempWork.Name = wrk.Name;
                     tempWork.Num = numWrk;
+                    tempWork.Price = wrk.Price;
                     await db.Works.AddAsync(tempWork);
 
                     if (receiptDb.ServicesProvidet == null)
@@ -124,15 +151,17 @@ namespace OXG.ServiceCenterWeb.Controllers
                         receiptDb.ServicesProvidet.Add(tempWork);
                     }
                 }
-                
-                if (receiptDb.ServicesProvidet == null)
-                {
-                    receiptDb.ServicesProvidet = new List<Work>();
-                    receiptDb.ServicesProvidet.Add(wrk);
-                }
                 else
                 {
-                    receiptDb.ServicesProvidet.Add(wrk);
+                    if (receiptDb.ServicesProvidet == null)
+                    {
+                        receiptDb.ServicesProvidet = new List<Work>();
+                        receiptDb.ServicesProvidet.Add(wrk);
+                    }
+                    else
+                    {
+                        receiptDb.ServicesProvidet.Add(wrk);
+                    }
                 }
                 receiptDb.TotalPrice = receiptDb.ServicesProvidet.Sum(r => r.Price * r.Num);
             }

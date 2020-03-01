@@ -44,6 +44,7 @@ namespace OXG.ServiceCenterWeb
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseStatusCodePages();
             app.UseStaticFiles();
 
             app.UseRouting();

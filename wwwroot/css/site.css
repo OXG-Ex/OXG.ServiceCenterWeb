@@ -106,9 +106,10 @@ input[type="checkbox"].input-validation-error {
 }
 
 /*https://source.unsplash.com/WEQbe2jBg40/600x1200*/
+/**/
 
 .bg-image {
-    background-image: url('https://source.unsplash.com/user/semes212/likes');
+    background-image: url('../Files/LoginBackground.jfif');
     background-size: cover;
     background-position: center;
 }

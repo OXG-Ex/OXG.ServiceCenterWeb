@@ -9,13 +9,13 @@ namespace OXG.ServiceCenterWeb.Models
     public class LoginModel
     {
         [Display(Name = "Электронная почта")]
-        [Required(ErrorMessage = "Данное поле обязательно для заполения")]
+        [Required(ErrorMessage = "Введите email")]
         [DataType(DataType.EmailAddress)]
-        [RegularExpression(@"(?i)\b[A-Z0-9._%-]+@[A-Z0-9.-]+\[A-Z]{2,4}\b")]
+        [RegularExpression(@"(?i)[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Z]{2,4}\b")]
         public string Email { get; set; }
 
         [Display(Name = "Пароль")]
-        [Required(ErrorMessage = "Данное поле обязательно для заполения")]
+        [Required(ErrorMessage = "Введите пароль")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

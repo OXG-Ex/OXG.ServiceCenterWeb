@@ -37,9 +37,23 @@ namespace OXG.ServiceCenterWeb.Controllers
             var employeer =await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(r => r.Id == id);
             ViewBag.Spetializations = new SelectList(StaticValues.MasterSpecializations);
             ViewBag.EmployeerSum = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status== "Выдано").Select(r => r.TotalPrice).SumAsync();
-            ViewBag.EmployeerSalary = (Double)ViewBag.EmployeerSum * (employeer.Percent/100);
-            //ViewBag.EmployeerBalance =
+            ViewBag.EmployeerSalary = (double)ViewBag.EmployeerSum * (employeer.Percent/100);
+            ViewBag.ReceiptsCount =await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").CountAsync();
             return View(employeer);
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> EditEmployeer(Employeer employeer)
+        {//TODO: добавить выбор роли текстом
+            var employeerDb = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(r => r.Id == employeer.Id);
+            employeerDb = employeer;
+            await db.SaveChangesAsync();
+            ViewBag.Spetializations = new SelectList(StaticValues.MasterSpecializations);
+            ViewBag.EmployeerSum = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").Select(r => r.TotalPrice).SumAsync();
+            ViewBag.EmployeerSalary = (double)ViewBag.EmployeerSum * (employeer.Percent / 100);
+            ViewBag.ReceiptsCount = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").CountAsync();
+            return View(employeerDb);
         }
 
         public IActionResult Works()
