@@ -22,7 +22,7 @@ namespace OXG.ServiceCenterWeb.Controllers
         }
 
         public IActionResult Index()
-        {
+        {//TODO: Сделать красивый INDEX
             return View();
         }
 
@@ -60,6 +60,22 @@ namespace OXG.ServiceCenterWeb.Controllers
         {
             var works = db.Works;
             return View(works);
+        }
+
+        public async Task<IActionResult> AddWork(string NameWork, byte NumWork, decimal PriceWork)
+        {
+            var work = new Work() {Name=NameWork, Num=NumWork, Price =PriceWork };
+            await db.Works.AddAsync(work);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Works");
+        }
+
+        public async Task<IActionResult> DeleteWork(int id)
+        {
+            var work =await db.Works.FirstOrDefaultAsync(r => r.Id == id);
+            db.Works.Remove(work);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Works");
         }
     }
 }

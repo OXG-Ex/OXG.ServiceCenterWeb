@@ -7,7 +7,7 @@
 
 <div class="card border-primary mb-3 ">
     <div class="card-header">Все квитанции</div>
-    <div class="card-body" style="height:550px; overflow:auto">
+    <div class="card-body" style="height:550px; overflow:auto" id="scroll">
         <table class="table table-hover" >
             <thead>
                 <tr>
@@ -33,3 +33,7 @@
         </table>
     </div>
 </div>
+
+<script type="text/javascript">
+    window.onload = function () { this.document.getElementById('scroll').scrollTop = 9999; }
+</script>
