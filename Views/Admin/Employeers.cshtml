@@ -28,6 +28,7 @@
                     <td>@item.Role.Name</td>
                     <td>@item.Specialization</td>
                     <td><a asp-controller="Admin" asp-action="EditEmployeer" asp-route-id="@item.Id"><img src="~/Files/diodon.png" width="30px" height="30px" /></a></td>
+                    <td><a id="deleteEmployeer" class="btn btn-outline-danger" asp-controller="Admin" asp-action="DeleteEmployeer" asp-route-id="@item.Id">Удалить</a></td>
                 </tr>
                 }
             </tbody>

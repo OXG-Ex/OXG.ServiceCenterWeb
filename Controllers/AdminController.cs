@@ -21,9 +21,22 @@ namespace OXG.ServiceCenterWeb.Controllers
             //servicesProvidet = new List<Work>();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {//TODO: Сделать красивый INDEX
-            return View();
+            var data = new AdminIndexModel();
+            for (int i = 0; i <= 30; i++)
+            {
+                    data.Dates.Add( DateTime.Now.AddDays(-i).ToShortDateString());
+                    data.Moneys.Add(await db.Receipts.Where(r => r.ClosedDate.DayOfYear == DateTime.Now.AddDays(-i).DayOfYear).SumAsync(r => r.TotalPrice));
+            }
+            data.Masters.AddRange(db.Employeers.Where(e => e.RoleId == 1).Select(e => e.Name));
+            foreach (var item in data.Masters)
+            {
+                data.Salaries.Add(await db.Receipts.Include(r => r.Employeer).Where(r => r.Employeer.Name==item).SumAsync(r => r.TotalPrice));
+            }
+            data.Moneys.Reverse();
+            data.Dates.Reverse();
+            return View(data);
         }
 
         public IActionResult Employeers()
@@ -47,13 +60,17 @@ namespace OXG.ServiceCenterWeb.Controllers
         public async Task<IActionResult> EditEmployeer(Employeer employeer)
         {//TODO: добавить выбор роли текстом
             var employeerDb = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(r => r.Id == employeer.Id);
-            employeerDb = employeer;
+            employeerDb.Name = employeer.Name;
+            employeerDb.RoleId = employeer.RoleId;
+            employeerDb.Specialization = employeer.Specialization;
+            employeerDb.Percent = employeer.Percent;
+            employeerDb.INN = employeer.INN;
             await db.SaveChangesAsync();
             ViewBag.Spetializations = new SelectList(StaticValues.MasterSpecializations);
             ViewBag.EmployeerSum = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").Select(r => r.TotalPrice).SumAsync();
             ViewBag.EmployeerSalary = (double)ViewBag.EmployeerSum * (employeer.Percent / 100);
             ViewBag.ReceiptsCount = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").CountAsync();
-            return View(employeerDb);
+            return View(employeer);
         }
 
         public IActionResult Works()
@@ -76,6 +93,31 @@ namespace OXG.ServiceCenterWeb.Controllers
             db.Works.Remove(work);
             await db.SaveChangesAsync();
             return RedirectToAction("Works");
+        }
+
+        public IActionResult Clients()
+        {
+            var clients = db.Clients;
+            return View(clients);
+        }
+
+        public async Task<IActionResult> DeleteClient(int id)
+        {
+            var client = await db.Clients.FirstOrDefaultAsync(r => r.Id == id);
+            db.Clients.Remove(client);
+            await db.SaveChangesAsync();
+            return RedirectToAction("Clients");
+        }
+
+        public async Task<IActionResult> DeleteEmployeer(int id)
+        {
+            var employeer = await db.Employeers.FirstOrDefaultAsync(r => r.Id == id);
+            if (employeer.Name!= User.Identity.Name)
+            {
+                db.Employeers.Remove(employeer);
+                await db.SaveChangesAsync();
+            }
+            return RedirectToAction("Employeers");
         }
     }
 }

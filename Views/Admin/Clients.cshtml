@@ -1,0 +1,34 @@
+﻿@model IEnumerable<OXG.ServiceCenterWeb.Models.Client>
+@{
+    ViewData["Title"] = "Clients";
+}
+
+<h1>Клиенты:</h1>
+
+<div class="card border-primary mb-3">
+    <div class="card-header">Все</div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Номер телефона</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <th scope="row">@item.Id</th>
+                        <td>@item.Name</td>
+                        <td>@item.Phone</td>
+                        <td>
+                            <a class="btn btn-outline-info" asp-controller="Admin" asp-action="DeleteClient" asp-route-id="@item.Id">Удалить</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

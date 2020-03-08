@@ -59,20 +59,20 @@ namespace OXG.ServiceCenterWeb.Controllers
         {
             employeer.Role = StaticValues.Master;
             var emp = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == User.Identity.Name);
-            if (emp.Password!= employeer.Password)
-            {
-                ModelState.AddModelError("","Пароль неверен");
-                return View(emp);
-            }
+            //if (emp.Password!= employeer.Password)
+            //{
+            //    ModelState.AddModelError("","Пароль неверен");
+            //    return View(emp);
+            //}
             if (!string.IsNullOrEmpty(NewPass))
             {
                 emp.Password = NewPass;
             }
-            else
-            {
-                ModelState.AddModelError("", "Новый пароль не может быть пустым");
-                return View(emp);
-            }
+            //else
+            //{
+            //    ModelState.AddModelError("", "Новый пароль не может быть пустым");
+            //    return View(emp);
+            //}
             emp.Name = employeer.Name;
             emp.INN = employeer.INN;
             emp.Specialization= employeer.Specialization;
@@ -117,6 +117,11 @@ namespace OXG.ServiceCenterWeb.Controllers
                 await db.SaveChangesAsync();
             }
             return RedirectToAction("MyAccount");
+        }
+
+        public async Task<IActionResult> ChangePhoto()
+        {
+          return View();
         }
     }
 }

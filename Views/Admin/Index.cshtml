@@ -1,11 +1,98 @@
-﻿
+﻿@model OXG.ServiceCenterWeb.Models.SpecialModels.AdminIndexModel
 @{
     ViewData["Title"] = "Index";
 }
+<script src="~/js/Chart.min.js"></script>
+
 
 <h1>Зона администратора</h1>
-<h2>*Здесь будет всякая статистика*</h2>
-<a asp-action="Employeers" asp-controller="Admin">Сотрудники</a>
-<br />
-<a asp-action="Works" asp-controller="Admin">Список услуг</a>
-<br />
+
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <a class="btn btn-outline-primary btn-block" asp-action="Employeers" asp-controller="Admin">Сотрудники</a>
+                <a class="btn btn-outline-primary btn-block" asp-action="Works" asp-controller="Admin">Список услуг</a>
+                <a class="btn btn-outline-primary btn-block" asp-action="Clients" asp-controller="Admin">Клиенты</a>
+                <a class="btn btn-outline-primary btn-block" asp-action="Employeers" asp-controller="Admin">Расходы</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+
+        <div class="card border-primary">
+            <div class="container-fluid">
+                <canvas id="myChart" width="420" height="220"></canvas>
+            </div>
+            <hr />
+            <div class="container-fluid">
+                <canvas id="EmployeersChart" width="420" height="220"></canvas>
+            </div>
+            <script>
+                var labls =@Json.Serialize(Model.Dates);
+                var datas =@Json.Serialize(Model.Moneys);
+                var masters =@Json.Serialize(Model.Masters);
+                var salaries =@Json.Serialize(Model.Salaries);
+                var ctx = document.getElementById("myChart");
+
+
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                labels:labls,
+                datasets: [{
+                    label: 'Выручка СЦ (₽)',
+                    data: datas,
+                    backgroundColor: [
+                '       rgba(0, 157, 255, 0.2)'
+                    ],
+                borderColor: [
+                         'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+                    }]
+                    },
+                options: {
+                    scales: {
+                    yAxes: [{
+                     ticks: {
+                    beginAtZero: true
+                        }
+                    }]
+                    }
+                    }
+                });
+
+                    var oilCanvas = document.getElementById("EmployeersChart");
+
+//Chart.defaults.global.defaultFontFamily = "Lato";
+//Chart.defaults.global.defaultFontSize = 18;
+
+                var oilData = {
+                    labels: masters,
+    datasets: [
+        {
+            data: salaries,
+            backgroundColor: [
+                "#63FF84",
+                "#8463FF",
+                "#84FF63",
+                "#6384FF",
+                "White"
+                ]
+                }]
+                };
+
+                var pieChart = new Chart(oilCanvas, {
+                    type: 'pie',
+                    data: oilData,
+                    options: { cutoutPercentage: 35 }
+                });
+
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/site.js"></script>
