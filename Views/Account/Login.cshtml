@@ -27,14 +27,14 @@
 										<h3 class="login-heading mb-4">Добро пожаловать!</h3>
 										@using (Html.BeginForm("Login"))
 										{
-											<div class="form-label-group">
+											<div class="form-group">
 
 												<input asp-for="Email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus />
 												<label asp-for="Email"></label>
 												<span asp-validation-for="Email" />
 											</div>
 
-											<div class="form-label-group">
+											<div class="form-group">
 
 												<input type="password" asp-for="Password" id="inputPassword" class="form-control" placeholder="Password" required />
 												<label asp-for="Password"></label>
