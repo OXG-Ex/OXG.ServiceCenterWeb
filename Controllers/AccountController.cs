@@ -26,6 +26,7 @@ namespace OXG.ServiceCenterWeb.Controllers
           
             return View();
         }
+
         /// <summary>
         /// Метод отвечающий за поиск пользователя в БД и аутентификацию
         /// </summary>
@@ -47,6 +48,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             ModelState.AddModelError("", "Неверный Email и(или) пароль");
             return View(model);
         }
+
         /// <summary>
         /// Метод возвращающий представление для регистрации нового пользователя
         /// </summary>
@@ -55,6 +57,7 @@ namespace OXG.ServiceCenterWeb.Controllers
         {
             return View();
         }
+
         /// <summary>
         /// Метод возвращающий представление, в случае недостаточных прав доступа
         /// </summary>
@@ -89,6 +92,7 @@ namespace OXG.ServiceCenterWeb.Controllers
                 ModelState.AddModelError("", "Некоректные данные регистрации");
                 return View(model);
         }
+
         /// <summary>
         /// Метод выполняющий вход в аккаунт и добавляющий аутентификационные куки 
         /// </summary>
@@ -106,6 +110,7 @@ namespace OXG.ServiceCenterWeb.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
+
         /// <summary>
         /// Метод выполняющий выход из аккаунта
         /// </summary>
