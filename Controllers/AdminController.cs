@@ -19,6 +19,7 @@ namespace OXG.ServiceCenterWeb.Controllers
         {
             db = context;
         }
+
         /// <summary>
         /// Подсчитывает статистику доходов за последние 30 дней, и статистику дохода мастеров 
         /// </summary>
@@ -40,6 +41,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             data.Dates.Reverse();
             return View(data);
         }
+
         /// <summary>
         /// Возвращает список мастеров в виде таблицы
         /// </summary>
@@ -48,6 +50,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             var employeers = db.Employeers.Include(e => e.Role);
             return View(employeers);
         }
+
         /// <summary>
         /// Возвращает представление редактирования сотрудника
         /// </summary>
@@ -84,6 +87,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             ViewBag.ReceiptsCount = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").CountAsync();
             return View(employeer);
         }
+
         /// <summary>
         /// Возвращает список услуг оказываемый СЦ
         /// </summary>
@@ -93,6 +97,7 @@ namespace OXG.ServiceCenterWeb.Controllers
             var works = db.Works;
             return View(works);
         }
+
         /// <summary>
         /// Добавлякт новую услугу в БД
         /// </summary>
@@ -148,7 +153,7 @@ namespace OXG.ServiceCenterWeb.Controllers
         public async Task<IActionResult> DeleteEmployeer(int id)
         {
             var employeer = await db.Employeers.FirstOrDefaultAsync(r => r.Id == id);
-            if (employeer.Name!= User.Identity.Name)
+            if (employeer.Email != User.Identity.Name)
             {
                 db.Employeers.Remove(employeer);
                 await db.SaveChangesAsync();

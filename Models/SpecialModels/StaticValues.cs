@@ -48,7 +48,8 @@ namespace OXG.ServiceCenterWeb.Models.SpecialModels
             "Ремонт орг. техники",
             "Заправка картриджей",
             "Ремонт бытовой техники",
-            "Компонентный ремонт"
+            "Компонентный ремонт",
+            "ADMIN"
         };
 
         public static Role Admin = new Role() { Name = "Администратор" };
