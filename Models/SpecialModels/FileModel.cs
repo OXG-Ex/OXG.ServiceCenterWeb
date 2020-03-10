@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models.SpecialModels
 {
+    /// <summary>
+    /// Модель использующаяся для сохранения загруженных файлов
+    /// </summary>
     public class FileModel
     {
         public string Name { get; set; }

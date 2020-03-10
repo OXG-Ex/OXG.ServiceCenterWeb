@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models
 {
+    /// <summary>
+    /// Модель использующаяся для регистрации нового аккаунта
+    /// </summary>
     public class RegisterModel
     {
         [Display(Name ="Электронная почта")]

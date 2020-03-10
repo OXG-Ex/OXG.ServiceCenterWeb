@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models
 {
+    /// <summary>
+    /// Модель контекста БД
+    /// </summary>
     public class ServiceCenterDbContext : DbContext
     {
         public ServiceCenterDbContext(DbContextOptions<ServiceCenterDbContext> options) : base (options)

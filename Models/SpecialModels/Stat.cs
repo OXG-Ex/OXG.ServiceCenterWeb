@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models
 {
+    //Модель использующаяся для визуализации страницы Home/Index
     public class Stat
     {
         public DateTime Now { get; set; } = DateTime.Now;

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models
 {
+    /// <summary>
+    /// Модель использующаяся для входа в аккаунт
+    /// </summary>
     public class LoginModel
     {
         [Display(Name = "Электронная почта")]

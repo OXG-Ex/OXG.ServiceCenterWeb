@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models.SpecialModels
 {
+    /// <summary>
+    /// Модель использующаяся для визуализации страницы Admin/Index
+    /// </summary>
     public class AdminIndexModel
     {
         public List<string> Dates { get; set; } 

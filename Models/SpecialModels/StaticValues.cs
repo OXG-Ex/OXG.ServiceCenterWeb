@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace OXG.ServiceCenterWeb.Models.SpecialModels
 {
+    /// <summary>
+    /// Статический класс хранящий используемые в процессе разработки значения
+    /// </summary>
     public static class StaticValues
     {
         public static List<string> EmployeerRoles = new List<string>() 
