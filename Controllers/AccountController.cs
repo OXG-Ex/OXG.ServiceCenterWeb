@@ -16,17 +16,21 @@ namespace OXG.ServiceCenterWeb.Controllers
     public class AccountController : Controller
     {
         private ServiceCenterDbContext db;
-        public AccountController(ServiceCenterDbContext context)
+        public AccountController(ServiceCenterDbContext context)//конструктор создающий объект контекста БД
         {
             db = context;
         }
 
-        public IActionResult Login()
+        public IActionResult Login()//Метод возвращающий представление для входа в аккаунт
         {
           
             return View();
         }
-       
+        /// <summary>
+        /// Метод отвечающий за поиск пользователя в БД и аутентификацию
+        /// </summary>
+        /// <param name="model">Модель полученная от пользователя(Логи + пароль)</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
@@ -43,18 +47,28 @@ namespace OXG.ServiceCenterWeb.Controllers
             ModelState.AddModelError("", "Неверный Email и(или) пароль");
             return View(model);
         }
-
+        /// <summary>
+        /// Метод возвращающий представление для регистрации нового пользователя
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Register()
         {
             return View();
         }
-
+        /// <summary>
+        /// Метод возвращающий представление, в случае недостаточных прав доступа
+        /// </summary>
+        /// <returns></returns>
         public IActionResult AccessDenied()
         {
             return View();
         }
        
-
+        /// <summary>
+        /// Метод отвечающий за регистарцию нового пользователя
+        /// </summary>
+        /// <param name="model">Модель регистарции (Логин + пароль  +подтверждение пароля)</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -64,18 +78,23 @@ namespace OXG.ServiceCenterWeb.Controllers
                 var employeer = await db.Employeers.FirstOrDefaultAsync(e => e.Email == model.Email);
                 if (employeer == null)
                 {
-                    db.Employeers.Add(new Employeer() { Email = model.Email, Password = model.Password, RoleId = 1 });
+                    db.Employeers.Add(new Employeer() { Email = model.Email, Password = model.Password, RoleId = 2 });
 
                     await db.SaveChangesAsync();
                     await Authenticate(model.Email, "Мастер");
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("MyAccount", "Personal");
                 }
 
             }
                 ModelState.AddModelError("", "Некоректные данные регистрации");
                 return View(model);
         }
-
+        /// <summary>
+        /// Метод выполняющий вход в аккаунт и добавляющий аутентификационные куки 
+        /// </summary>
+        /// <param name="employeerName">Логин пользователя</param>
+        /// <param name="employeerRole">Роль</param>
+        /// <returns></returns>
         private async Task Authenticate(string employeerName, string employeerRole)
         {
             var claims = new List<Claim>()
@@ -87,10 +106,12 @@ namespace OXG.ServiceCenterWeb.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
-
+        /// <summary>
+        /// Метод выполняющий выход из аккаунта
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Logout()
         {
-            
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }

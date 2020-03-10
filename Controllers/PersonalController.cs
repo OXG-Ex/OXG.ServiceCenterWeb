@@ -26,7 +26,10 @@ namespace OXG.ServiceCenterWeb.Controllers
             _appEnvironment = appEnvironment;
         }
 
-        
+        /// <summary>
+        /// НАходит пользователя в БД и передает объект в представление
+        /// </summary>
+        /// <returns>Представление личного кабинета пользователя</returns>
         public async Task<IActionResult> MyAccount()
         {
             ViewBag.Spetializations = new SelectList(StaticValues.MasterSpecializations);
@@ -44,6 +47,9 @@ namespace OXG.ServiceCenterWeb.Controllers
             }
             
         }
+        /// <summary>
+        /// Возвращает представление для редактирования личных данных
+        /// </summary>
         public async Task<IActionResult> Edit()
         {
             ViewBag.Spetializations = new SelectList(StaticValues.MasterSpecializations);
@@ -53,26 +59,27 @@ namespace OXG.ServiceCenterWeb.Controllers
             ViewBag.ReceiptsCount = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").CountAsync();
             return View(employeer);
         }
-
+        /// <summary>
+        /// Сохраняет изменения в БД
+        /// </summary>
+        /// <param name="employeer">Объект пользователя</param>
+        /// <param name="NewPass">Новый пароль</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(Employeer employeer, string NewPass)
         {
             employeer.Role = StaticValues.Master;
             var emp = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == User.Identity.Name);
-            //if (emp.Password!= employeer.Password)
-            //{
-            //    ModelState.AddModelError("","Пароль неверен");
-            //    return View(emp);
-            //}
+            
             if (!string.IsNullOrEmpty(NewPass))
             {
+                if (emp.Password != employeer.Password)
+                {
+                    ModelState.AddModelError("", "Пароль неверен");
+                    return View(emp);
+                }
                 emp.Password = NewPass;
             }
-            //else
-            //{
-            //    ModelState.AddModelError("", "Новый пароль не может быть пустым");
-            //    return View(emp);
-            //}
             emp.Name = employeer.Name;
             emp.INN = employeer.INN;
             emp.Specialization= employeer.Specialization;
@@ -81,7 +88,11 @@ namespace OXG.ServiceCenterWeb.Controllers
             await db.SaveChangesAsync();
             return RedirectToAction("MyAccount");
         }
-
+        /// <summary>
+        /// Отвечает за списание средств со счёта сотрудника
+        /// </summary>
+        /// <param name="employeer">Объект сотрудника</param>
+        /// <param name="sum">Сумма списания</param>
         public async Task<IActionResult> Salary(Employeer employeer,decimal sum)
         {
             var emp = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == User.Identity.Name);
@@ -100,7 +111,11 @@ namespace OXG.ServiceCenterWeb.Controllers
             }
             return View("MyAccount", emp);
         }
-
+        /// <summary>
+        /// Загружает фото пользователя на сервер и сохраняет данные в БД
+        /// </summary>
+        /// <param name="uploadedFile">Загружаемы файл</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> ChangePhoto(IFormFile uploadedFile)
         {
@@ -118,7 +133,9 @@ namespace OXG.ServiceCenterWeb.Controllers
             }
             return RedirectToAction("MyAccount");
         }
-
+        /// <summary>
+        /// Возвращает представление для смены фото сотрудника
+        /// </summary>
         public async Task<IActionResult> ChangePhoto()
         {
           return View();

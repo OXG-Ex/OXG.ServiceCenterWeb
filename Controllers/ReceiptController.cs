@@ -15,14 +15,15 @@ namespace OXG.ServiceCenterWeb.Controllers
     [Authorize]
     public class ReceiptController : Controller
     {
-        //private List<Work> servicesProvidet;
         private ServiceCenterDbContext db;
         public ReceiptController(ServiceCenterDbContext context)
         {
             db = context;
-           //servicesProvidet = new List<Work>();
         }
 
+        /// <summary>
+        /// Возвращает представление для создания квитанции
+        /// </summary>
         public IActionResult Create()
         {
             ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name == "Мастер"), "Id","Name");
@@ -30,7 +31,12 @@ namespace OXG.ServiceCenterWeb.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// Создает новую квитанцию, привязывает к ней мастера, оборудование и клиента.
+        /// Сохраняет квитанцию  в бд
+        /// </summary>
+        /// <param name="receipt">Объект квитанции</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Create(Receipt receipt)
         {//TODO: Добавить проверку значений
@@ -38,25 +44,29 @@ namespace OXG.ServiceCenterWeb.Controllers
             var client = new Client() { Name = receipt.Client.Name, Phone = receipt.Client.Phone };
             var equipment = new Equipment() { Name = receipt.Equipment.Name, Accesories = receipt.Equipment.Accesories };
             var employeer = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Id == receipt.Employeer.Id);
-
-            //await db.Clients.AddAsync(client);
-            //await db.Equipments.AddAsync(equipment);
-            
-
             receipt.Employeer = employeer;
+            receipt.Client = client;
+            receipt.Equipment = equipment;
             receipt.CreatedDate = DateTime.Now;
             await db.Receipts.AddAsync(receipt);
             await db.SaveChangesAsync();
             return RedirectToAction("All");
         }
 
-
+        /// <summary>
+        /// Возвращает представление с таблицей всех квитанций
+        /// </summary>
+        /// <returns></returns>
         public IActionResult All()
         {
             var receipts =  db.Receipts.Include(e => e.Equipment);
             return View(receipts);
         }
-
+        /// <summary>
+        /// Находит квитанцию в БД и передаёт её в представление
+        /// </summary>
+        /// <param name="id">ID квитанции</param>
+        /// <returns>Представление для редактирования квитанции</returns>
         public IActionResult Edit(int id)
         {
             ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name == "Мастер"), "Id", "Name");
@@ -65,7 +75,12 @@ namespace OXG.ServiceCenterWeb.Controllers
             var receipt = db.Receipts.Include(e => e.Employeer).Include(e => e.Equipment).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefault(r => r.Id == id);
             return View(receipt);
         }
-
+        /// <summary>
+        /// Удаляет услугу из квитанции
+        /// </summary>
+        /// <param name="id">Id квитанции</param>
+        /// <param name="RID">Id услуги</param>
+        /// <returns></returns>
         public async Task<IActionResult> DeleteWork(int id, int RID)
         {
             ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name == "Мастер"), "Id", "Name");
@@ -74,18 +89,28 @@ namespace OXG.ServiceCenterWeb.Controllers
             var receipt = db.Receipts.Include(e => e.Equipment).Include(e => e.Employeer).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefault(r => r.Id == RID);
             var work = await db.Works.FirstOrDefaultAsync(w => w.Id == id);
             receipt.ServicesProvidet./*Clear()*/Remove(work);
-            //receipt.TotalPrice = receipt.ServicesProvidet.Sum(r => r.Price * r.Num);
             await db.SaveChangesAsync();
             return RedirectToAction("Edit",receipt);
         }
-
+        /// <summary>
+        /// Метод сохранения любых изменений в квитанции
+        /// </summary>
+        /// <param name="receipt">Квитанция</param>
+        /// <param name="closeBtn">Кнопка закрытия квитанции</param>
+        /// <param name="saveBtn">Кнопка сохранения изменений в квитанции</param>
+        /// <param name="AddWorkBtn">Кнопка добавления услуги к квитанции</param>
+        /// <param name="work">Услуга</param>
+        /// <param name="numWrk">Кол-во услуг</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(Receipt receipt, string closeBtn, string saveBtn, string AddWorkBtn, int work, byte numWrk)
-        {//TODO: Добавить защиту от повторного закрытия квитанций 
+        {
             ViewBag.Employeers = new SelectList(db.Employeers.Include(e => e.Role).Where(r => r.Role.Name=="Мастер"), "Id", "Name");
             ViewBag.Status = new SelectList(StaticValues.Statuses);
             ViewBag.Works = new SelectList(db.Works, "Id", "Name");
             var receiptDb = await db.Receipts.Include(e => e.Equipment).Include(e => e.Employeer).Include(c => c.Client).Include(w => w.ServicesProvidet).FirstOrDefaultAsync(r => r.Id == receipt.Id);
+           
+            ///Закрытие квитанции
             if (closeBtn != null)
             {
                 receiptDb.Status = "Выдано";
@@ -117,7 +142,8 @@ namespace OXG.ServiceCenterWeb.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("All");
             }
-
+            
+            ///Сохранение изменнений в квитанции
             if (saveBtn != null)
             {
                 receiptDb.Status = receipt.Status;
@@ -127,7 +153,8 @@ namespace OXG.ServiceCenterWeb.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("All");
             }
-
+           
+            ///Добавление услуги в квитанцию
             if (AddWorkBtn != null)
             {//TODO: Добавить редактирование кол-ва услуг
 

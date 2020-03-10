@@ -17,10 +17,14 @@ namespace OXG.ServiceCenterWeb.Controllers
         private ServiceCenterDbContext db;
         public HomeController(ILogger<HomeController> logger, ServiceCenterDbContext context)
         {
-            _logger = logger;
+            _logger = logger;//не используется
             db = context;
         }
-
+        /// <summary>
+        /// Подсчитывает статистику сц(Доход за день/месяц), статистику мастеров (работник дня/месяца) 
+        /// и передаёт их в представление
+        /// </summary>
+        /// <returns>Представление домашней страницы</returns>
         [Authorize]
         public async Task<IActionResult> Index()
         {
@@ -65,10 +69,12 @@ namespace OXG.ServiceCenterWeb.Controllers
 
         public IActionResult Privacy()
         {
-            
+            //TODO: написать представление для правил пользования
             return View();
         }
-
+        /// <summary>
+        /// Возвращает страницу ошибки
+        /// </summary>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
