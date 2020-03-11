@@ -71,20 +71,19 @@ namespace OXG.ServiceCenterWeb.Controllers
             employeer.Role = StaticValues.Master;
             var emp = await db.Employeers.Include(e => e.Role).FirstOrDefaultAsync(e => e.Email == User.Identity.Name);
             
-            if (!string.IsNullOrEmpty(NewPass))
+            if (!string.IsNullOrWhiteSpace(NewPass))
             {
                 if (emp.Password != employeer.Password)
                 {
                     ModelState.AddModelError("", "Пароль неверен");
                     return View(emp);
                 }
+                emp.Email = employeer.Email;
                 emp.Password = NewPass;
             }
             emp.Name = employeer.Name;
             emp.INN = employeer.INN;
             emp.Specialization= employeer.Specialization;
-            emp.Email = employeer.Email;
-            emp.Password = employeer.Password;
             await db.SaveChangesAsync();
             return RedirectToAction("MyAccount");
         }
