@@ -82,7 +82,9 @@ namespace OXG.ServiceCenterWeb.Controllers
             employeerDb.INN = employeer.INN;
             await db.SaveChangesAsync();
             ViewBag.Spetializations = new SelectList(StaticValues.MasterSpecializations);
-            ViewBag.EmployeerSum = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").Select(r => r.TotalPrice).SumAsync();
+            ViewBag.EmployeerSum = await db.Receipts.Include(e => e.Employeer)
+                .Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано")
+                .Select(r => r.TotalPrice).SumAsync();
             ViewBag.EmployeerSalary = (double)ViewBag.EmployeerSum * (employeer.Percent / 100);
             ViewBag.ReceiptsCount = await db.Receipts.Include(e => e.Employeer).Where(r => r.Employeer.Name == employeer.Name && r.Status == "Выдано").CountAsync();
             return View(employeer);
