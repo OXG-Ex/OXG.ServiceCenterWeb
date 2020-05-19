@@ -14,7 +14,6 @@ namespace OXG.ServiceCenterWeb.Models
         [Display(Name ="Электронная почта")]
         [Required(ErrorMessage ="Введите email")]
         [DataType(DataType.EmailAddress)]
-        [RegularExpression(@"(?i)[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Z]{2,4}\b", ErrorMessage ="Неверный Email")]
         public string Email { get; set; }
 
         [Display(Name = "Введите пароль")]

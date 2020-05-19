@@ -68,9 +68,9 @@ namespace OXG.ServiceCenterWeb.Controllers
         }
        
         /// <summary>
-        /// Метод отвечающий за регистарцию нового пользователя
+        /// Метод отвечающий за регистрацию нового пользователя
         /// </summary>
-        /// <param name="model">Модель регистарции (Логин + пароль  +подтверждение пароля)</param>
+        /// <param name="model">Модель регистрации (Логин + пароль  +подтверждение пароля)</param>
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
